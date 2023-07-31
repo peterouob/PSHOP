@@ -11,11 +11,10 @@ import (
 type store uint8
 
 const (
-	ram store = iota //儲存在內存
 	rds store = iota //儲存在redis
 	def
 
-	prefix   = "gws_id"                          //默認session前綴,rds儲存時使用
+	prefix   = "session_id"                      //默認session前綴,rds儲存時使用
 	lifetime = time.Duration(1800) * time.Second //默認session的lifeTime
 )
 
@@ -78,40 +77,6 @@ type option struct {
 	Secure     bool          `json:"secure"` //安全
 	Domain     string        `json:"domain"` //範圍
 }
-
-var (
-	// WithLifeTime 是設定session生命週期,其中返回一個含option指針的函數
-	WithLifeTime = func(d time.Duration) func(o *option) {
-		return func(o *option) {
-			o.LifeTime = d
-		}
-	}
-	WithCookieName = func(n string) func(o *option) {
-		return func(o *option) {
-			o.CookieName = n
-		}
-	}
-	WithHttpOnly = func(b bool) func(o *option) {
-		return func(o *option) {
-			o.HttpOnly = b
-		}
-	}
-	WithPath = func(p string) func(o *option) {
-		return func(o *option) {
-			o.Path = p
-		}
-	}
-	WithSecure = func(s bool) func(o *option) {
-		return func(o *option) {
-			o.Secure = s
-		}
-	}
-	WithDomain = func(domain string) func(o *option) {
-		return func(o *option) {
-			o.Domain = domain
-		}
-	}
-)
 
 type RDSOption struct {
 	option
