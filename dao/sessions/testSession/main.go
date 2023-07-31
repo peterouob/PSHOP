@@ -37,5 +37,33 @@ func main() {
 		jsonstr, _ := json.Marshal(session.Values["user"])
 		fmt.Fprintln(writer, string(jsonstr))
 	})
+
+	http.HandleFunc("/clean", func(rw http.ResponseWriter, request *http.Request) {
+		session, _ := sessions.GetSession(rw, request)
+		// clean session data
+		session.Values = make(sessions.Values)
+		//gws.Malloc(&session.Values)
+		// sync session modify
+		session.Remove()
+		fmt.Fprintf(rw, "clean session data successful.")
+	})
+	http.HandleFunc("/migrate", func(writer http.ResponseWriter, request *http.Request) {
+		var (
+			session *sessions.Session
+			err     error
+		)
+
+		session, _ = sessions.GetSession(writer, request)
+		log.Printf("old session %p \n", session)
+
+		if session, err = sessions.Migrate(writer, session); err != nil {
+			fmt.Fprintln(writer, err.Error())
+			return
+		}
+
+		log.Printf("old session %v \n", session)
+		jsonstr, _ := json.Marshal(session.Values["user"])
+		fmt.Fprintln(writer, string(jsonstr))
+	})
 	log.Println(http.ListenAndServe(":8083", nil))
 }

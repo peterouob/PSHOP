@@ -1,6 +1,7 @@
 package sessions
 
 import (
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"net/http"
@@ -14,11 +15,13 @@ var (
 	migrateMux    sync.Mutex
 )
 
+type Values map[string]interface{}
+
 type Session struct {
 	id       string
 	CreateAt time.Time
 	ExpireAt time.Time
-	Values   map[string]interface{}
+	Values
 }
 
 func NewSession() *Session {
@@ -85,9 +88,37 @@ func Open(opt Configure) {
 		}
 		globalStorage = rdb
 	default:
-		fmt.Errorf("unsupported store: %v", globalConfig.store)
+		err := fmt.Errorf("unsupported store: %v", globalConfig.store)
+		fmt.Println(err.Error())
 	}
 }
+
+func Migrate(w http.ResponseWriter, oldSession *Session) (*Session, error) {
+	var (
+		ns     = NewSession()
+		cookie = NewCookie()
+	)
+	migrateMux.Lock()
+	defer migrateMux.Unlock()
+	ns.Values = oldSession.Values
+	cookie.Value = ns.id
+	cookie.MaxAge = int(globalConfig.LifeTime) / 1e9
+	return ns,
+		func() error {
+			if ns.Sync() != nil {
+				return errors.New("error migrating session")
+			}
+			if globalStorage.Remove(oldSession) != nil {
+				return errors.New("error removing session")
+			}
+			http.SetCookie(w, cookie)
+			return nil
+		}()
+}
+
 func (s *Session) Sync() error {
 	return globalStorage.Write(s)
+}
+func (s *Session) Remove() error {
+	return globalStorage.Remove(s)
 }
