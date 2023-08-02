@@ -6,3 +6,4 @@ server:
   host: localhost
 token:
   val: login_token
+  refreshval: refresh_token

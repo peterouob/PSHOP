@@ -18,10 +18,17 @@ func Login(c *gin.Context) {
 	if r.RowsAffected == 1 {
 		fmt.Println("get User")
 	}
-	token, err := utils.CreateToken(user.UserIdentity)
+	tk, err := utils.CreateToken(user.UserIdentity)
 	if err != nil {
-		H.Fail(c, "failed to create token")
-	} else {
-		H.OK(c, "token created"+" "+token)
+		H.Fail(c, "create token failed"+err.Error())
 	}
+	saveErr := utils.SaveTokenAuth(user.UserIdentity, tk)
+	if saveErr != nil {
+		H.Fail(c, "save token error"+saveErr.Error())
+	}
+	t := map[string]string{
+		"accessToken":  tk.AccessToken,
+		"refreshToken": tk.RefreshToken,
+	}
+	H.OK(c, t)
 }
