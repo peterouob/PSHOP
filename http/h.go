@@ -29,7 +29,7 @@ func Forbidden(c *gin.Context, msg interface{}) {
 	c.Abort()
 }
 
-func SetCookieForToken(c *gin.Context, name, value string) {
+func SetCookie(c *gin.Context, name, value string) {
 	c.SetCookie(name, value, 365*3600, "/", utils.Config.GetString("server.host"), false, true)
 }
 

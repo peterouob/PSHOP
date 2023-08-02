@@ -1,8 +1,10 @@
 package sessions
 
 import (
+	H "PSHOP/http"
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
 	"sync"
@@ -44,32 +46,32 @@ func NewCookie() *http.Cookie {
 	}
 }
 
-func GetSession(w http.ResponseWriter, r *http.Request) (*Session, error) {
+func GetSession(c *gin.Context, r *http.Request) (*Session, error) {
 	var session Session
 	cookie, err := r.Cookie(globalConfig.CookieName)
 	if cookie == nil && err != nil {
-		return CreateSession(w, cookie)
+		return CreateSession(c, cookie)
 	}
 	if len(cookie.Value) >= 73 {
 		session.id = cookie.Value
 		if err := globalStorage.Read(&session); err != nil {
-			return CreateSession(w, cookie)
+			return CreateSession(c, cookie)
 		}
 	}
 	return &session, nil
 }
 
-func CreateSession(w http.ResponseWriter, cookie *http.Cookie) (*Session, error) {
+func CreateSession(c *gin.Context, cookie *http.Cookie) (*Session, error) {
 	session := NewSession()
 	if cookie == nil {
 		cookie = NewCookie()
 	}
 	cookie.Value = session.id
-	cookie.MaxAge = int(globalConfig.LifeTime) / 1e9
 	if err := globalStorage.Write(session); err != nil {
 		return nil, err
 	}
-	http.SetCookie(w, cookie)
+	//http.SetCookie(w, cookie)
+	H.SetCookie(c, "session_cookie", cookie.Value)
 	return session, nil
 }
 func uuid73() string {

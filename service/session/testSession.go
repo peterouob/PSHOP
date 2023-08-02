@@ -8,7 +8,7 @@ import (
 )
 
 func Set(c *gin.Context) {
-	session, _ := sessions.GetSession(c.Writer, c.Request)
+	session, _ := sessions.GetSession(c, c.Request)
 	session.Values["user"] = "hey"
 	session.Sync()
 	fmt.Println("setting session successfully", session.Values["user"])
@@ -16,7 +16,7 @@ func Set(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	session, _ := sessions.GetSession(c.Writer, c.Request)
+	session, _ := sessions.GetSession(c, c.Request)
 	jsonstr, _ := json.Marshal(session.Values["user"])
 	c.JSON(200, string(jsonstr))
 }

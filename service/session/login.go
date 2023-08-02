@@ -27,7 +27,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	r := mysql.Db.Where("user_name = ? and password = ?", user.UserName, user.Password).First(&user)
-	session, _ := sessions.GetSession(c.Writer, c.Request)
+	session, _ := sessions.GetSession(c, c.Request)
 	session.Values["user"] = uuid.NewString()
 	session.Sync()
 
