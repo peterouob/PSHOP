@@ -17,5 +17,5 @@ func MysqlInit() {
 		err = fmt.Errorf("database connection have problem: %v", err)
 		fmt.Println(err)
 	}
-	fmt.Println("Database connection ...")
+	fmt.Println("Mysql connection ...")
 }

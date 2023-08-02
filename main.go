@@ -2,6 +2,7 @@ package main
 
 import (
 	"PSHOP/dao/mysql"
+	"PSHOP/dao/redis"
 	"PSHOP/routes"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -15,6 +16,7 @@ func main() {
 	r := gin.Default()
 	go func() {
 		mysql.MysqlInit()
+		redis.RedisInit()
 	}()
 	addr = os.Getenv("ADDR")
 	if addr == "" {
@@ -23,5 +25,3 @@ func main() {
 	routes.SetupRouter(r)
 	r.Run(":" + addr)
 }
-
-//utils.Config.GetString("mysql.dsn")

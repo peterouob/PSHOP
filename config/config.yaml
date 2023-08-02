@@ -1,2 +1,8 @@
 mysql:
   dsn: root:123456@tcp(127.0.0.1:3306)/pshop?charset=utf8mb4&parseTime=True&loc=Local
+redis:
+  addr: 127.0.0.1:6379
+server:
+  host: localhost
+token:
+  val: login_token

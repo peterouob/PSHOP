@@ -11,6 +11,7 @@ type UserModel struct {
 	Password     string    `json:"password"`
 	Phone        string    `json:"phone"`
 	Email        string    `json:"email"`
+	UserSession  string    `json:"user_session"`
 	CreateAt     time.Time `json:"create_at"`
 }
 
