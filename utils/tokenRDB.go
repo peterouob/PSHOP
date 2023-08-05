@@ -57,6 +57,7 @@ func CreateToken(id string) (*Token, error) {
 	return t, nil
 }
 
+// ExtractToken 從請求標頭擷取token
 func ExtractToken(r *http.Request) string {
 	bearToken := r.Header.Get("Authorization")
 	strArr := strings.Split(bearToken, " ")
@@ -65,4 +66,31 @@ func ExtractToken(r *http.Request) string {
 		return strArr[1]
 	}
 	return ""
+}
+
+// VerifyToken 檢查token簽名方法
+func VerifyToken(r *http.Request) (*jwt.Token, error) {
+	tokenString := ExtractToken(r)
+	token, err := jwt.Parse(tokenString, func(tk *jwt.Token) (interface{}, error) {
+		if _, ok := tk.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected method: %v", tk.Header["alg"])
+		}
+		return []byte(Config.GetString("token.val")), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
+}
+
+// TokenValid 驗證token時效性
+func TokenValid(r *http.Request) error {
+	token, err := VerifyToken(r)
+	if err != nil {
+		return err
+	}
+	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
+		return err
+	}
+	return nil
 }
