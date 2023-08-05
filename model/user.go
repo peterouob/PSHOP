@@ -2,6 +2,8 @@ package model
 
 import "time"
 
+var C chan string = make(chan string, 1024)
+
 type UserModel struct {
 	Id           string    `json:"id"`
 	UserIdentity string    `json:"userIdentity"`
@@ -11,7 +13,6 @@ type UserModel struct {
 	Password     string    `json:"password"`
 	Phone        string    `json:"phone"`
 	Email        string    `json:"email"`
-	UserSession  string    `json:"user_session"`
 	CreateAt     time.Time `json:"create_at"`
 }
 

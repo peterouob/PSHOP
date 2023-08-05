@@ -11,7 +11,8 @@ func SessionAuth() gin.HandlerFunc {
 		if err != nil {
 			H.Forbidden(c, err.Error())
 		} else {
-			H.OK(c, "hello")
+			//H.OK(c, "hello")
+			c.Next()
 		}
 	}
 }

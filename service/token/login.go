@@ -1,6 +1,7 @@
-package service
+package serviceToken
 
 import (
+	"PSHOP/dao"
 	"PSHOP/dao/mysql"
 	H "PSHOP/http"
 	"PSHOP/model"
@@ -22,7 +23,7 @@ func Login(c *gin.Context) {
 	if err != nil {
 		H.Fail(c, "create token failed"+err.Error())
 	}
-	saveErr := utils.SaveTokenAuth(user.UserIdentity, tk)
+	saveErr := dao.SaveTokenAuth(user.UserIdentity, tk)
 	if saveErr != nil {
 		H.Fail(c, "save token error"+saveErr.Error())
 	}
@@ -30,5 +31,7 @@ func Login(c *gin.Context) {
 		"accessToken":  tk.AccessToken,
 		"refreshToken": tk.RefreshToken,
 	}
+	H.SetCookie(c, "accessToken", tk.AccessToken)
+	//H.SetCookieForToken(c, "refreshToken", tk.RefreshToken)
 	H.OK(c, t)
 }

@@ -1,6 +1,7 @@
 package sessions
 
 import (
+	"PSHOP/model"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -51,7 +52,9 @@ func (r *RdsStore) Write(s *Session) (err error) {
 		cancel()
 		r.rw.Unlock()
 	}()
-	return r.store.Set(timeout, formatPrefix(s.id), data, expire(s.ExpireAt)).Err()
+	prename := formatPrefix(s.id)
+	model.C <- prename
+	return r.store.Set(timeout, prename, data, expire(s.ExpireAt)).Err()
 }
 
 func (r *RdsStore) Remove(s *Session) (err error) {
@@ -61,7 +64,8 @@ func (r *RdsStore) Remove(s *Session) (err error) {
 		cancel()
 		r.rw.Unlock()
 	}()
-	return r.store.Del(timeout, formatPrefix(s.id)).Err()
+	name := <-model.C
+	return r.store.Del(timeout, name).Err()
 }
 
 func formatPrefix(sid string) string {

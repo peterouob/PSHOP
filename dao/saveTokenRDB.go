@@ -1,12 +1,13 @@
-package utils
+package dao
 
 import (
 	"PSHOP/dao/redis"
+	"PSHOP/utils"
 	"context"
 	"time"
 )
 
-func SaveTokenAuth(userid string, td *Token) error {
+func SaveTokenAuth(userid string, td *utils.Token) error {
 	at := time.Unix(td.AtExp, 0)
 	rt := time.Unix(td.ReExp, 0)
 	now := time.Now()

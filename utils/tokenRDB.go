@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
+	"net/http"
+	"strings"
 	"time"
 )
 
@@ -53,4 +55,14 @@ func CreateToken(id string) (*Token, error) {
 		return nil, err
 	}
 	return t, nil
+}
+
+func ExtractToken(r *http.Request) string {
+	bearToken := r.Header.Get("Authorization")
+	strArr := strings.Split(bearToken, " ")
+	if len(strArr) == 2 {
+		fmt.Println(strArr)
+		return strArr[1]
+	}
+	return ""
 }

@@ -47,6 +47,7 @@ func NewCookie() *http.Cookie {
 }
 
 func GetSession(c *gin.Context, r *http.Request) (*Session, error) {
+
 	var session Session
 	cookie, err := r.Cookie(globalConfig.CookieName)
 	if cookie == nil && err != nil {
@@ -95,7 +96,7 @@ func Open(opt Configure) {
 	}
 }
 
-func Migrate(w http.ResponseWriter, oldSession *Session) (*Session, error) {
+func Migrate(c *gin.Context, oldSession *Session) (*Session, error) {
 	var (
 		ns     = NewSession()
 		cookie = NewCookie()
@@ -113,8 +114,10 @@ func Migrate(w http.ResponseWriter, oldSession *Session) (*Session, error) {
 			if globalStorage.Remove(oldSession) != nil {
 				return errors.New("error removing session")
 			}
-			http.SetCookie(w, cookie)
+			//http.SetCookie(w, cookie)
+			H.SetCookie(c, cookie.Name, cookie.Value)
 			return nil
+
 		}()
 }
 

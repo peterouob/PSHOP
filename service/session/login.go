@@ -17,6 +17,8 @@ func init() {
 	sessions.Open(sessions.NewRDSOptions("127.0.0.1", 6379, ""))
 }
 
+var session *sessions.Session
+
 func Login(c *gin.Context) {
 	var user model.UserModel
 	if err := c.ShouldBind(&user); err != nil {
@@ -26,9 +28,10 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+	var uid = uuid.NewString()
 	r := mysql.Db.Where("user_name = ? and password = ?", user.UserName, user.Password).First(&user)
-	session, _ := sessions.GetSession(c, c.Request)
-	session.Values["user"] = uuid.NewString()
+	session, _ = sessions.GetSession(c, c.Request)
+	session.Values["user"] = uid
 	session.Sync()
 
 	if r.RowsAffected == 1 {
@@ -36,6 +39,7 @@ func Login(c *gin.Context) {
 			"code":    0,
 			"msg":     "hello " + user.UserName,
 			"session": session,
+			"prename": <-model.C,
 		})
 	}
 }
