@@ -1,4 +1,4 @@
-package redis
+package redisdao
 
 import (
 	"PSHOP/utils"

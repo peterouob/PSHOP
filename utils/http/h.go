@@ -1,9 +1,12 @@
 package H
 
 import (
+	"PSHOP/model/dao/redis"
 	"PSHOP/utils"
+	"context"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func OK(c *gin.Context, msg interface{}) {
@@ -35,4 +38,13 @@ func SetCookie(c *gin.Context, name, value string) {
 
 func RemoveCookie(c *gin.Context, key string) {
 	c.SetCookie(key, "", -1, "", utils.Config.GetString("server.host"), false, true)
+}
+
+func FectApi(authD *utils.AccessDetails) (uint64, error) {
+	userid, err := redisdao.Rdb.Get(context.Background(), authD.AccessUid).Result()
+	if err != nil {
+		return 0, err
+	}
+	userId, _ := strconv.ParseUint(userid, 10, 64)
+	return userId, nil
 }

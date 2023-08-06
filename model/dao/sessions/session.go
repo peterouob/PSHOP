@@ -1,7 +1,7 @@
 package sessions
 
 import (
-	H "PSHOP/http"
+	"PSHOP/utils/http"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"

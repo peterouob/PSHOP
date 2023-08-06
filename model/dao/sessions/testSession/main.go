@@ -1,7 +1,7 @@
 package main
 
 import (
-	"PSHOP/dao/sessions"
+	sessions2 "PSHOP/model/dao/sessions"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	sessions.Open(sessions.NewRDSOptions("127.0.0.1", 6379, ""))
+	sessions2.Open(sessions2.NewRDSOptions("127.0.0.1", 6379, ""))
 }
 
 type UserInfo struct {
@@ -20,7 +20,7 @@ type UserInfo struct {
 
 func main() {
 	http.HandleFunc("/set", func(writer http.ResponseWriter, request *http.Request) {
-		session, _ := sessions.GetSession(writer, request)
+		session, _ := sessions2.GetSession(writer, request)
 
 		session.Values["user"] = &UserInfo{
 			UserName: "Leon Ding",
@@ -33,15 +33,15 @@ func main() {
 	})
 
 	http.HandleFunc("/get", func(writer http.ResponseWriter, request *http.Request) {
-		session, _ := sessions.GetSession(writer, request)
+		session, _ := sessions2.GetSession(writer, request)
 		jsonstr, _ := json.Marshal(session.Values["user"])
 		fmt.Fprintln(writer, string(jsonstr))
 	})
 
 	http.HandleFunc("/clean", func(rw http.ResponseWriter, request *http.Request) {
-		session, _ := sessions.GetSession(rw, request)
+		session, _ := sessions2.GetSession(rw, request)
 		// clean session data
-		session.Values = make(sessions.Values)
+		session.Values = make(sessions2.Values)
 		//gws.Malloc(&session.Values)
 		// sync session modify
 		session.Remove()
@@ -49,14 +49,14 @@ func main() {
 	})
 	http.HandleFunc("/migrate", func(writer http.ResponseWriter, request *http.Request) {
 		var (
-			session *sessions.Session
+			session *sessions2.Session
 			err     error
 		)
 
-		session, _ = sessions.GetSession(writer, request)
+		session, _ = sessions2.GetSession(writer, request)
 		log.Printf("old session %p \n", session)
 
-		if session, err = sessions.Migrate(writer, session); err != nil {
+		if session, err = sessions2.Migrate(writer, session); err != nil {
 			fmt.Fprintln(writer, err.Error())
 			return
 		}
