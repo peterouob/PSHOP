@@ -1,7 +1,7 @@
 package session
 
 import (
-	"PSHOP/dao/sessions"
+	"PSHOP/model/dao/sessions"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"

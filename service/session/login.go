@@ -1,9 +1,9 @@
 package session
 
 import (
-	"PSHOP/dao/mysql"
-	"PSHOP/dao/sessions"
 	"PSHOP/model"
+	"PSHOP/model/dao/mysql"
+	sessions2 "PSHOP/model/dao/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
@@ -14,10 +14,10 @@ type LoginResponse struct {
 }
 
 func init() {
-	sessions.Open(sessions.NewRDSOptions("127.0.0.1", 6379, ""))
+	sessions2.Open(sessions2.NewRDSOptions("127.0.0.1", 6379, ""))
 }
 
-var session *sessions.Session
+var session *sessions2.Session
 
 func Login(c *gin.Context) {
 	var user model.UserModel
@@ -30,7 +30,7 @@ func Login(c *gin.Context) {
 	}
 	var uid = uuid.NewString()
 	r := mysql.Db.Where("user_name = ? and password = ?", user.UserName, user.Password).First(&user)
-	session, _ = sessions.GetSession(c, c.Request)
+	session, _ = sessions2.GetSession(c, c.Request)
 	session.Values["user"] = uid
 	session.Sync()
 
