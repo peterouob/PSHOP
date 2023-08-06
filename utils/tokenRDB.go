@@ -5,6 +5,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -19,10 +20,14 @@ type Token struct {
 	AtExp       int64
 	ReExp       int64
 }
+type AccessDetails struct {
+	AccessUid string
+	Userid    uint64
+}
 
 var err error
 
-func CreateToken(id string) (*Token, error) {
+func CreateToken(id uint64) (*Token, error) {
 	t := &Token{}
 	t.AccessUUid = uuid.NewString()
 	t.RefreshUUid = uuid.NewString()
@@ -62,7 +67,7 @@ func ExtractToken(r *http.Request) string {
 	bearToken := r.Header.Get("Authorization")
 	strArr := strings.Split(bearToken, " ")
 	if len(strArr) == 2 {
-		fmt.Println(strArr)
+		fmt.Println(strArr[1])
 		return strArr[1]
 	}
 	return ""
@@ -93,4 +98,28 @@ func TokenValid(r *http.Request) error {
 		return err
 	}
 	return nil
+}
+
+// ExtractTokenMetadata 提取token原數據已進行redis查找
+func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
+	token, err := VerifyToken(r)
+	if err != nil {
+		return nil, err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		accessUuid, ok := claims["access_uuid"].(string)
+		if !ok {
+			return nil, err
+		}
+		userId, err := strconv.ParseUint(fmt.Sprintf("%.f", claims["user_id"]), 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return &AccessDetails{
+			AccessUid: accessUuid,
+			Userid:    userId,
+		}, nil
+	}
+	return nil, err
 }

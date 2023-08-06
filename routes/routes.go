@@ -24,6 +24,7 @@ func SetupRouter(r *gin.Engine) {
 		rauth.Use(middleware.RDBAuthToken())
 		{
 			rauth.GET("/", service.Backbord)
+			rauth.POST("/create", serviceToken.Create)
 		}
 	}
 	t := r.Group("/testSession")

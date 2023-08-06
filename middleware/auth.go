@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	H "PSHOP/http"
+	"PSHOP/utils/http"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +23,7 @@ func RDBAuthToken() gin.HandlerFunc {
 		if err != nil {
 			H.Forbidden(c, "not authorized")
 		} else {
-			H.OK(c, "hello")
+			c.Next()
 		}
 	}
 }

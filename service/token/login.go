@@ -1,13 +1,15 @@
 package serviceToken
 
 import (
-	"PSHOP/dao"
-	"PSHOP/dao/mysql"
-	H "PSHOP/http"
 	"PSHOP/model"
+	"PSHOP/model/dao"
+	"PSHOP/model/dao/mysql"
 	"PSHOP/utils"
+	"PSHOP/utils/http"
+	"encoding/binary"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func Login(c *gin.Context) {
@@ -19,7 +21,8 @@ func Login(c *gin.Context) {
 	if r.RowsAffected == 1 {
 		fmt.Println("get User")
 	}
-	tk, err := utils.CreateToken(user.UserIdentity)
+	user.TokenUserid = binary.BigEndian.Uint64([]byte(uuid.NewString()))
+	tk, err := utils.CreateToken(user.TokenUserid)
 	if err != nil {
 		H.Fail(c, "create token failed"+err.Error())
 	}
