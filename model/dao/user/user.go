@@ -1,6 +1,8 @@
-package model
+package user
 
-import "time"
+import (
+	"time"
+)
 
 var C chan string = make(chan string, 1024)
 

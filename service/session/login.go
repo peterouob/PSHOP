@@ -1,17 +1,13 @@
 package session
 
 import (
-	"PSHOP/model"
 	"PSHOP/model/dao/mysql"
 	sessions2 "PSHOP/model/dao/sessions"
+	"PSHOP/model/dao/user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
 )
-
-type LoginResponse struct {
-	LoginFlag bool `json:"login_flag"`
-}
 
 func init() {
 	sessions2.Open(sessions2.NewRDSOptions("127.0.0.1", 6379, ""))
@@ -20,8 +16,8 @@ func init() {
 var session *sessions2.Session
 
 func Login(c *gin.Context) {
-	var user model.UserModel
-	if err := c.ShouldBind(&user); err != nil {
+	var u user.UserModel
+	if err := c.ShouldBind(&u); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
 			"msg":  "set value failed",
@@ -29,7 +25,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	var uid = uuid.NewString()
-	r := mysql.Db.Where("user_name = ? and password = ?", user.UserName, user.Password).First(&user)
+	r := mysql.Db.Where("user_name = ? and password = ?", u.UserName, u.Password).First(&u)
 	session, _ = sessions2.GetSession(c, c.Request)
 	session.Values["user"] = uid
 	session.Sync()
@@ -37,9 +33,9 @@ func Login(c *gin.Context) {
 	if r.RowsAffected == 1 {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
-			"msg":     "hello " + user.UserName,
+			"msg":     "hello " + u.UserName,
 			"session": session,
-			"prename": <-model.C,
+			"prename": <-user.C,
 		})
 	}
 }

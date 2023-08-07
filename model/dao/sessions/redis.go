@@ -1,7 +1,7 @@
 package sessions
 
 import (
-	"PSHOP/model"
+	"PSHOP/model/dao/user"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -53,7 +53,7 @@ func (r *RdsStore) Write(s *Session) (err error) {
 		r.rw.Unlock()
 	}()
 	prename := formatPrefix(s.id)
-	model.C <- prename
+	user.C <- prename
 	return r.store.Set(timeout, prename, data, expire(s.ExpireAt)).Err()
 }
 
@@ -64,7 +64,7 @@ func (r *RdsStore) Remove(s *Session) (err error) {
 		cancel()
 		r.rw.Unlock()
 	}()
-	name := <-model.C
+	name := <-user.C
 	return r.store.Del(timeout, name).Err()
 }
 

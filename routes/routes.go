@@ -5,6 +5,7 @@ import (
 	"PSHOP/service"
 	"PSHOP/service/session"
 	"PSHOP/service/token"
+	"PSHOP/service/user"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +13,8 @@ func SetupRouter(r *gin.Engine) {
 	r.POST("/login", session.Login)
 	r.POST("/create", session.Create)
 	r.POST("/logout", session.Logout)
+	r.GET("/find/:class", user.Block)
+	r.GET("/", user.BlockAll)
 	s := r.Group("session")
 	s.Use(middleware.SessionAuth())
 	{

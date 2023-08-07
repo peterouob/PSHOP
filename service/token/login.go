@@ -1,9 +1,9 @@
 package serviceToken
 
 import (
-	"PSHOP/model"
-	"PSHOP/model/dao"
 	"PSHOP/model/dao/mysql"
+	"PSHOP/model/dao/redis"
+	"PSHOP/model/dao/user"
 	"PSHOP/utils"
 	"PSHOP/utils/http"
 	"encoding/binary"
@@ -13,7 +13,7 @@ import (
 )
 
 func Login(c *gin.Context) {
-	var user model.UserModel
+	var user user.UserModel
 	if err := c.ShouldBind(&user); err != nil {
 		H.Fail(c, "bind failed")
 	}
@@ -26,7 +26,7 @@ func Login(c *gin.Context) {
 	if err != nil {
 		H.Fail(c, "create token failed"+err.Error())
 	}
-	saveErr := dao.SaveTokenAuth(user.UserIdentity, tk)
+	saveErr := redisdao.SaveTokenAuth(user.UserIdentity, tk)
 	if saveErr != nil {
 		H.Fail(c, "save token error"+saveErr.Error())
 	}

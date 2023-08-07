@@ -1,8 +1,8 @@
 package session
 
 import (
-	"PSHOP/model"
 	"PSHOP/model/dao/mysql"
+	"PSHOP/model/dao/user"
 	"PSHOP/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -11,7 +11,7 @@ import (
 )
 
 func Create(c *gin.Context) {
-	var user model.UserModel
+	var user user.UserModel
 	if err := c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
