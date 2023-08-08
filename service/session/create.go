@@ -2,7 +2,7 @@ package session
 
 import (
 	"PSHOP/model/dao/mysql"
-	"PSHOP/model/dao/user"
+	"PSHOP/model/user"
 	"PSHOP/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

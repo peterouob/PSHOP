@@ -2,7 +2,7 @@ package user
 
 import (
 	"PSHOP/model/dao/mysql"
-	"PSHOP/model/dao/user"
+	"PSHOP/model/user"
 	H "PSHOP/utils/http"
 	"github.com/gin-gonic/gin"
 )

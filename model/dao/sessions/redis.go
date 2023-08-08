@@ -1,7 +1,7 @@
 package sessions
 
 import (
-	"PSHOP/model/dao/user"
+	"PSHOP/model/user"
 	"context"
 	"encoding/json"
 	"fmt"

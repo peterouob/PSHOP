@@ -1,4 +1,4 @@
-package serviceToken
+package user
 
 import (
 	"PSHOP/utils"
