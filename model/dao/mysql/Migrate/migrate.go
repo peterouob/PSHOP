@@ -1,7 +1,7 @@
 package main
 
 import (
-	"PSHOP/model/dao/user"
+	user2 "PSHOP/model/user"
 	"fmt"
 	mysql2 "gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,9 +15,9 @@ func main() {
 
 	}
 	if err := D.AutoMigrate(
-		&user.UserModel{},
-		&user.Block{},
-		&user.Block{},
+		&user2.UserModel{},
+		&user2.Block{},
+		&user2.Block{},
 	); err != nil {
 		log.Printf("error : %v", err)
 	}
