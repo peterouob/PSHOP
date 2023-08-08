@@ -20,3 +20,10 @@ func SaveTokenAuth(userid string, td *utils.Token) error {
 	}
 	return nil
 }
+func DeleteTokenAuth(uid string) (int64, error) {
+	deleted, err := Rdb.Del(context.Background(), uid).Result()
+	if err != nil {
+		return 0, err
+	}
+	return deleted, nil
+}

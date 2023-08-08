@@ -5,6 +5,7 @@ import (
 	"PSHOP/service"
 	"PSHOP/service/session"
 	"PSHOP/service/token"
+	user2 "PSHOP/service/token/user"
 	"PSHOP/service/user"
 	"github.com/gin-gonic/gin"
 )
@@ -23,11 +24,13 @@ func SetupRouter(r *gin.Engine) {
 	tk := r.Group("tk")
 	{
 		tk.POST("/login", serviceToken.Login)
+		tk.POST("/create", serviceToken.CreateUser)
 		rauth := r.Group("/rauth")
 		rauth.Use(middleware.RDBAuthToken())
 		{
 			rauth.GET("/", service.Backbord)
-			rauth.POST("/create", serviceToken.Create)
+			rauth.POST("/logout", serviceToken.Logout)
+			rauth.POST("/createtodo", user2.Create)
 		}
 	}
 	t := r.Group("/testSession")
