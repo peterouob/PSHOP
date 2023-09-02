@@ -3,19 +3,21 @@ package routes
 import (
 	"PSHOP/middleware"
 	"PSHOP/service"
+	"PSHOP/service/good"
 	"PSHOP/service/session"
 	"PSHOP/service/token"
 	user2 "PSHOP/service/token/user"
-	"PSHOP/service/user"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter(r *gin.Engine) {
+	r.GET("/", good.BlockAll)
 	r.POST("/login", session.Login)
 	r.POST("/create", session.Create)
 	r.POST("/logout", session.Logout)
-	r.GET("/find/:class", user.Block)
-	r.GET("/", user.BlockAll)
+	r.GET("/find/:class", good.Block)
+	r.GET("/:goodId", good.GetGood)
+	r.GET("/comment", user2.GetComment)
 	s := r.Group("session")
 	s.Use(middleware.SessionAuth())
 	{
@@ -30,13 +32,9 @@ func SetupRouter(r *gin.Engine) {
 		{
 			rauth.GET("/", service.Backbord)
 			rauth.POST("/logout", serviceToken.Logout)
+			//rauth.GET("/refresh", serviceToken.RefreshToken)
 			rauth.POST("/createtodo", user2.Create)
+			rauth.POST("/:goodId/addcomment", user2.AddComment)
 		}
-	}
-	t := r.Group("/testSession")
-	{
-		//經測試後發現POST無法獲得session,GET可以
-		t.GET("/set", session.Set)
-		t.GET("/get", session.Get)
 	}
 }
