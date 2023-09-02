@@ -1,7 +1,7 @@
 package main
 
 import (
-	sessions2 "PSHOP/model/dao/sessions"
+	sessions2 "PSHOP/model/database/sessions"
 	"encoding/json"
 	"fmt"
 	"log"

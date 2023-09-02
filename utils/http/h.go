@@ -1,7 +1,7 @@
 package H
 
 import (
-	"PSHOP/model/dao/redis"
+	"PSHOP/model/database/redis"
 	"PSHOP/utils"
 	"context"
 	"fmt"

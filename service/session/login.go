@@ -1,8 +1,8 @@
 package session
 
 import (
-	"PSHOP/model/dao/mysql"
-	sessions2 "PSHOP/model/dao/sessions"
+	"PSHOP/model/database/mysql"
+	sessions2 "PSHOP/model/database/sessions"
 	"PSHOP/model/user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

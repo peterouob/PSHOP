@@ -1,7 +1,7 @@
 package serviceToken
 
 import (
-	redisdao "PSHOP/model/dao/redis"
+	redisdao "PSHOP/model/database/redis"
 	"PSHOP/utils"
 	H "PSHOP/utils/http"
 	"github.com/gin-gonic/gin"

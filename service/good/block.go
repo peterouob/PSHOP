@@ -1,7 +1,7 @@
-package user
+package good
 
 import (
-	"PSHOP/model/dao/mysql"
+	"PSHOP/model/database/mysql"
 	"PSHOP/model/user"
 	H "PSHOP/utils/http"
 	"github.com/gin-gonic/gin"

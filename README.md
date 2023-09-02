@@ -3,6 +3,7 @@
 - [x] 完善session功能
 - [ ] sudo權限
 - [x] 完成token部分
+- [ ] 刷新token
 - [x] 商品主頁面(依照種類分類)
 - [ ] 黑名單系統
 - [ ] 購物車系統
@@ -32,3 +33,12 @@
 - 使用preload查詢where查詢依舊查到不希望存在的資料
   - 解決:
     - 在preload前再where查詢一次 
+
+### 商品介紹和評論為先1對多再多對多連接
+- 主要用到的tag
+```text
+foreignKey	指定当前模型的列作为连接表的外键
+many2many	指定连接表表名
+joinForeignKey	指定连接表的外键列名，其将被映射到当前表
+joinReferences	指定连接表的外键列名，其将被映射到引用表
+```

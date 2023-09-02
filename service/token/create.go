@@ -1,7 +1,7 @@
 package serviceToken
 
 import (
-	"PSHOP/model/dao/mysql"
+	"PSHOP/model/database/mysql"
 	user2 "PSHOP/model/user"
 	"PSHOP/utils"
 	H "PSHOP/utils/http"

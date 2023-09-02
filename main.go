@@ -1,8 +1,8 @@
 package main
 
 import (
-	"PSHOP/model/dao/mysql"
-	"PSHOP/model/dao/redis"
+	"PSHOP/model/database/mysql"
+	"PSHOP/model/database/redis"
 	"PSHOP/routes"
 	"github.com/gin-gonic/gin"
 	"os"

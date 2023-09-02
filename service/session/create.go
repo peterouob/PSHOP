@@ -1,9 +1,10 @@
 package session
 
 import (
-	"PSHOP/model/dao/mysql"
+	"PSHOP/model/database/mysql"
 	"PSHOP/model/user"
 	"PSHOP/utils"
+	H "PSHOP/utils/http"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
@@ -12,7 +13,8 @@ import (
 
 func Create(c *gin.Context) {
 	var user user.UserModel
-	if err := c.ShouldBind(&user); err != nil {
+	var err error
+	if err = c.ShouldBind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
 			"msg":  "set value failed",
@@ -29,7 +31,10 @@ func Create(c *gin.Context) {
 	}
 	user.CreateAt = time.Now()
 	user.UserIdentity = uuid.NewString()
-	err := mysql.Db.Create(&user).Error
+	if err != nil {
+		H.Fail(c, "parse uuid failed")
+	}
+	err = mysql.Db.Create(&user).Error
 	if utils.MysqlErrcode(err) == utils.ErrDuplicateEntryCode {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code": -1,
