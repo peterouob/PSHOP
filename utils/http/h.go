@@ -25,6 +25,14 @@ func Fail(c *gin.Context, msg interface{}) {
 	return
 }
 
+func FailStatus(c *gin.Context, code int, msg interface{}) {
+	c.JSON(code, gin.H{
+		"code": -1,
+		"msg":  msg,
+	})
+	return
+}
+
 func Forbidden(c *gin.Context, msg interface{}) {
 	c.JSON(http.StatusForbidden, gin.H{
 		"code": -1,

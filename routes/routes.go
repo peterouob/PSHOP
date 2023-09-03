@@ -7,17 +7,19 @@ import (
 	"PSHOP/service/session"
 	"PSHOP/service/token"
 	user2 "PSHOP/service/token/user"
+	H "PSHOP/utils/http"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter(r *gin.Engine) {
+	r.Use(H.Cors)
 	r.GET("/", good.BlockAll)
 	r.POST("/login", session.Login)
 	r.POST("/create", session.Create)
 	r.POST("/logout", session.Logout)
 	r.GET("/find/:class", good.Block)
 	r.GET("/:goodId", good.GetGood)
-	r.GET("/comment", user2.GetComment)
+	//r.GET("/comment", user2.GetComment)
 	s := r.Group("session")
 	s.Use(middleware.SessionAuth())
 	{
