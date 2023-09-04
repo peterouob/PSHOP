@@ -10,16 +10,21 @@ import (
 
 func Add(c *gin.Context) {
 	var cartModel user.Cart
+	var goodInfo user.GoodInfo
+
+	goodId := c.Param("goodId")
+	mysql.Db.Model(&user.GoodInfo{}).Where("good_id =?", goodId).Find(&goodInfo)
 	identity, err := c.Cookie("userIdentity")
 	if err != nil {
 		H.Fail(c, "get cookie error")
 	}
-	c.ShouldBind(&cartModel)
 	cartModel.UserIdentity = identity
+	cartModel.Nums = 1
+	cartModel.GoodID = goodId
+	cartModel.GoodName = goodInfo.Name
 	if err := cart.Add(cartModel); err != nil {
 		H.Fail(c, err.Error())
 	}
-
 	result := mysql.Db.Find(&cartModel, "good_id =?", cartModel.GoodID).RowsAffected
 	if result >= 1 {
 		if err := mysql.Db.Model(&user.Cart{}).Where("good_id =?", cartModel.GoodID).Update("nums", cartModel.Nums+1).Error; err != nil {
