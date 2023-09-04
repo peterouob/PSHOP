@@ -1,4 +1,4 @@
-package user
+package u
 
 import (
 	"PSHOP/utils"

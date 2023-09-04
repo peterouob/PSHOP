@@ -27,6 +27,7 @@ func MysqlInit() {
 		&user2.GoodInfo{},
 		&user2.Comment{},
 		&user2.Replay{},
+		&user2.Cart{},
 	); err != nil {
 		log.Printf("error : %v", err)
 	}

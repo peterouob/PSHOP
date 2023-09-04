@@ -38,6 +38,7 @@ func SetupRouter(r *gin.Engine) {
 			//rauth.GET("/refresh", serviceToken.RefreshToken)
 			rauth.POST("/createtodo", user2.Create)
 			rauth.POST("/:goodId/addcomment", comment.AddComment)
+			rauth.POST("/addCart", user2.Add)
 		}
 	}
 }
