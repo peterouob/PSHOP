@@ -7,6 +7,7 @@ import (
 	"PSHOP/service/session"
 	"PSHOP/service/token"
 	user2 "PSHOP/service/token/user"
+	"PSHOP/service/token/user/comment"
 	H "PSHOP/utils/http"
 	"github.com/gin-gonic/gin"
 )
@@ -36,7 +37,7 @@ func SetupRouter(r *gin.Engine) {
 			rauth.POST("/logout", serviceToken.Logout)
 			//rauth.GET("/refresh", serviceToken.RefreshToken)
 			rauth.POST("/createtodo", user2.Create)
-			rauth.POST("/:goodId/addcomment", user2.AddComment)
+			rauth.POST("/:goodId/addcomment", comment.AddComment)
 		}
 	}
 }

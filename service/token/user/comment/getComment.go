@@ -1,4 +1,4 @@
-package user
+package comment
 
 import (
 	"PSHOP/model/database/mysql"
