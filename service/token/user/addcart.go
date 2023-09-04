@@ -19,8 +19,18 @@ func Add(c *gin.Context) {
 	if err := cart.Add(cartModel); err != nil {
 		H.Fail(c, err.Error())
 	}
-	if err := mysql.Db.Create(&cartModel).Error; err != nil {
-		H.Fail(c, err.Error())
+
+	result := mysql.Db.Find(&cartModel, "good_id =?", cartModel.GoodID).RowsAffected
+	if result >= 1 {
+		if err := mysql.Db.Model(&user.Cart{}).Where("good_id =?", cartModel.GoodID).Update("nums", cartModel.Nums+1).Error; err != nil {
+			H.Fail(c, err.Error())
+		}
+		H.OK(c, "success")
+	} else {
+		if err := mysql.Db.Create(&cartModel).Error; err != nil {
+			H.Fail(c, err.Error())
+		} else {
+			H.OK(c, "success insert cart")
+		}
 	}
-	H.OK(c, "success insert cart")
 }
