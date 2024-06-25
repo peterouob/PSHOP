@@ -1,7 +1,7 @@
 package redisdao
 
 import (
-	"PSHOP/utils"
+	"PSHOP/config"
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
@@ -11,7 +11,7 @@ var Rdb *redis.Client
 
 func RedisInit() {
 	Rdb = redis.NewClient(&redis.Options{
-		Addr:     utils.Config.GetString("redis.addr"),
+		Addr:     config.Config.GetString("redis.addr"),
 		Password: "",
 		DB:       0,
 	})

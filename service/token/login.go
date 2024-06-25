@@ -2,7 +2,6 @@ package serviceToken
 
 import (
 	"PSHOP/model/database/mysql"
-	"PSHOP/model/database/redis"
 	"PSHOP/model/user"
 	"PSHOP/utils"
 	"PSHOP/utils/http"
@@ -26,7 +25,7 @@ func Login(c *gin.Context) {
 	if err != nil {
 		H.Fail(c, "create token failed"+err.Error())
 	}
-	saveErr := redisdao.SaveTokenAuth(u.UserIdentity, tk)
+	saveErr := utils.SaveTokenAuth(u.UserIdentity, tk)
 	if saveErr != nil {
 		H.Fail(c, "save token error"+saveErr.Error())
 	}

@@ -1,6 +1,7 @@
 package H
 
 import (
+	"PSHOP/config"
 	"PSHOP/model/database/redis"
 	"PSHOP/utils"
 	"context"
@@ -42,11 +43,11 @@ func Forbidden(c *gin.Context, msg interface{}) {
 }
 
 func SetCookie(c *gin.Context, name, value string) {
-	c.SetCookie(name, value, 365*3600, "/", utils.Config.GetString("server.host"), false, true)
+	c.SetCookie(name, value, 365*3600, "/", config.Config.GetString("server.host"), false, true)
 }
 
 func RemoveCookie(c *gin.Context, key string) {
-	c.SetCookie(key, "", -1, "", utils.Config.GetString("server.host"), false, true)
+	c.SetCookie(key, "", -1, "", config.Config.GetString("server.host"), false, true)
 }
 
 func FectApi(authD *utils.AccessDetails) (uint64, error) {
