@@ -60,6 +60,7 @@ func CreateToken(id uint64) (*Token, error) {
 		fmt.Println("sign token error: ", err)
 		return nil, err
 	}
+
 	go refreshTokenRoutine(t.RefreshToken, id, rtokenVal)
 
 	return t, nil
