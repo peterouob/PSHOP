@@ -35,7 +35,6 @@ func SetupRouter(r *gin.Engine) {
 		{
 			rauth.GET("/", service.Backbord)
 			rauth.POST("/logout", serviceToken.Logout)
-			//rauth.GET("/refresh", serviceToken.RefreshToken)
 			rauth.POST("/createtodo", user2.Create)
 			rauth.POST("/:goodId/addcomment", comment.AddComment)
 			rauth.POST("/:goodId/addCart", user2.Add)
